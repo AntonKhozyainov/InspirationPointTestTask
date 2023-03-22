@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">InspirationPointTestTask</string>
+    <string name="amount_of_points">Сумма очков</string>
+    <string name="ranked">Место</string>
+    <string name="participant">Участник %1$s</string>
+    <string name="incorrect_value">Введено неверное значение</string>
+    <string name="numb_1">1</string>
+    <string name="numb_2">2</string>
+    <string name="numb_3">3</string>
+    <string name="numb_4">4</string>
+    <string name="numb_5">5</string>
+    <string name="numb_6">6</string>
+    <string name="numb_7">7</string>
+    <string name="edit_text_x">x</string>
+</resources>

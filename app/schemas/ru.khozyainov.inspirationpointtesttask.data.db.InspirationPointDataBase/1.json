@@ -1,0 +1,98 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "dd42bef7bd52dee40cfe87cbb8baabac",
+    "entities": [
+      {
+        "tableName": "participant",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `amount_of_points` INTEGER NOT NULL, `ranked` INTEGER NOT NULL, `field_1` INTEGER, `field_2` INTEGER, `field_3` INTEGER, `field_4` INTEGER, `field_5` INTEGER, `field_6` INTEGER, `field_7` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amountOfPoints",
+            "columnName": "amount_of_points",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ranked",
+            "columnName": "ranked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "field1",
+            "columnName": "field_1",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "field2",
+            "columnName": "field_2",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "field3",
+            "columnName": "field_3",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "field4",
+            "columnName": "field_4",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "field5",
+            "columnName": "field_5",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "field6",
+            "columnName": "field_6",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "field7",
+            "columnName": "field_7",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_participant_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_participant_id` ON `${TABLE_NAME}` (`id`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dd42bef7bd52dee40cfe87cbb8baabac')"
+    ]
+  }
+}
