@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import ru.khozyainov.inspirationpointtesttask.model.Participant
 
 interface ParticipantRepository {
-    fun getParticipant(): Flow<List<Participant>>
-    suspend fun updateParticipant(participant: Participant)
+    fun getParticipants(): Flow<List<Participant>>
+    suspend fun updateParticipants(participants: List<Participant>)
 }

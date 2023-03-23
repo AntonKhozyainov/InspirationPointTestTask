@@ -18,6 +18,7 @@
     <style name="InspirationEditText" parent="Widget.AppCompat.EditText">
         <item name="android:gravity">center</item>
         <item name="android:imeOptions">flagNoExtractUi|actionNext</item>
+        <item name="android:selectAllOnFocus">true</item>
         <item name="android:background">@color/white</item>
         <item name="android:maxLength">1</item>
         <item name="android:maxLines">1</item>

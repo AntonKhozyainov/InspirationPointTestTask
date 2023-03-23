@@ -22,6 +22,5 @@ class ParticipantAdapter(
         override fun areContentsTheSame(oldItem: Participant, newItem: Participant): Boolean {
             return oldItem == newItem
         }
-
     }
 }

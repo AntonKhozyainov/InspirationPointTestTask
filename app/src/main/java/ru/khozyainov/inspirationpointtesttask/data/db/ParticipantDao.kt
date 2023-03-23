@@ -15,5 +15,5 @@ interface ParticipantDao {
     suspend fun insertParticipant(participant: ParticipantEntity)
 
     @Update
-    suspend fun updateParticipant(participant: ParticipantEntity)
+    suspend fun updateParticipants(participants: List<ParticipantEntity>)
 }

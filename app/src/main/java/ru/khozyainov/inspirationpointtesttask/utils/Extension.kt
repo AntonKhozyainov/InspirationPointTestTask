@@ -1,6 +1,5 @@
 package ru.khozyainov.inspirationpointtesttask.utils
 
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -22,14 +21,13 @@ inline fun <T> Flow<T>.launchAndCollectIn(
     }
 }
 
-fun EditText.onNext(callback: () -> Unit) {
-    imeOptions = EditorInfo.IME_ACTION_NEXT
-    maxLines = 1
-    setOnEditorActionListener { _, actionId, _ ->
-        if (actionId == EditorInfo.IME_ACTION_NEXT) {
-            callback.invoke()
-            true
-        }
-        false
+fun EditText.updateText(text: String) {
+    val focussed = hasFocus()
+    if (focussed) {
+        clearFocus()
+    }
+    setText(text)
+    if (focussed) {
+        requestFocus()
     }
 }

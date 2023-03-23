@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +12,7 @@ import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import ru.khozyainov.inspirationpointtesttask.R
 import ru.khozyainov.inspirationpointtesttask.databinding.FragmentItemBinding
 import ru.khozyainov.inspirationpointtesttask.model.Participant
-import ru.khozyainov.inspirationpointtesttask.utils.onNext
+import ru.khozyainov.inspirationpointtesttask.utils.updateText
 
 
 class ParticipantAdapterDelegate(
@@ -62,15 +61,21 @@ class ParticipantAdapterDelegate(
                 idTextView.text = participant.id.toString()
                 idTextView.background.setTint(Color.WHITE)
 
-                getTextForEditText(participantEditText1, participant.field1)
-                getTextForEditText(participantEditText2, participant.field2)
-                getTextForEditText(participantEditText3, participant.field3)
-                getTextForEditText(participantEditText4, participant.field4)
-                getTextForEditText(participantEditText5, participant.field5)
-                getTextForEditText(participantEditText6, participant.field6)
-                getTextForEditText(participantEditText7, participant.field7)
+                regTextWatcher(participantEditText1, participant, 1)
+                regTextWatcher(participantEditText2, participant, 2)
+                regTextWatcher(participantEditText3, participant, 3)
+                regTextWatcher(participantEditText4, participant, 4)
+                regTextWatcher(participantEditText5, participant, 5)
+                regTextWatcher(participantEditText6, participant, 6)
+                regTextWatcher(participantEditText7, participant, 7)
 
-                setClickListeners(participant)
+                setTextToEditText(participantEditText1, participant.field1)
+                setTextToEditText(participantEditText2, participant.field2)
+                setTextToEditText(participantEditText3, participant.field3)
+                setTextToEditText(participantEditText4, participant.field4)
+                setTextToEditText(participantEditText5, participant.field5)
+                setTextToEditText(participantEditText6, participant.field6)
+                setTextToEditText(participantEditText7, participant.field7)
 
                 when (participant.id) {
                     1 -> disableEditText(participantEditText1)
@@ -82,113 +87,67 @@ class ParticipantAdapterDelegate(
                     else -> disableEditText(participantEditText7)
                 }
 
-                val amountOfPoints = getAmountOfPoints(participant)
-                if (amountOfPoints != 0) {
-                    onItemClicked(participant.copy(amountOfPoints = amountOfPoints))
-                    participantAmountOfPoints.text = amountOfPoints.toString()
+                if (participant.amountOfPoints != 0) {
+                    participantAmountOfPoints.text = participant.amountOfPoints.toString()
                 } else {
                     participantAmountOfPoints.text = ""
                 }
 
                 participantAmountOfPoints.background.setTint(Color.WHITE)
 
-                participantRanked.text = if (participant.ranked != 0) participant.ranked.toString() else ""
+                participantRanked.text =
+                    if (participant.ranked != 0) participant.ranked.toString() else ""
                 participantRanked.background.setTint(Color.WHITE)
             }
         }
 
-        private fun getAmountOfPoints(participant: Participant): Int {
-            var filled = 0
-            var result = 0
-
-            var pair = checkField(participant.field1)
-            filled += pair.first
-            result += pair.second
-
-            pair = checkField(participant.field2)
-            filled += pair.first
-            result += pair.second
-
-            pair = checkField(participant.field3)
-            filled += pair.first
-            result += pair.second
-
-            pair = checkField(participant.field4)
-            filled += pair.first
-            result += pair.second
-
-            pair = checkField(participant.field5)
-            filled += pair.first
-            result += pair.second
-
-            pair = checkField(participant.field6)
-            filled += pair.first
-            result += pair.second
-
-            pair = checkField(participant.field7)
-            filled += pair.first
-            result += pair.second
-
-            return if (filled == 6) result
-            else 0
-        }
-
-        private fun checkField(field: Int?): Pair<Int, Int> =
-            if (field != null && field in 0..5) 1 to field
-            else 0 to 0
-
-        private fun getTextForEditText(participantEditText: EditText, fieldValue: Int?) {
+        private fun setTextToEditText(participantEditText: EditText, fieldValue: Int?) {
             when (fieldValue) {
                 null -> {
-                    participantEditText.hint = "x"
+                    participantEditText.updateText("x")
                     participantEditText.background.setTint(Color.WHITE)
                 }
                 !in 0..5 -> {
                     participantEditText.background.setTint(Color.RED)
-                    participantEditText.hint = fieldValue.toString()
+                    participantEditText.updateText(fieldValue.toString())
                 }
-                else -> participantEditText.hint = fieldValue.toString()
+                else -> participantEditText.updateText(fieldValue.toString())
             }
         }
 
-        private fun disableEditText(participantEditText: EditText) {
-            participantEditText.isEnabled = false
-            participantEditText.background.setTint(Color.BLACK)
-        }
-
-        private fun setClickListener(
+        private fun regTextWatcher(
+            editText: EditText,
             participant: Participant,
-            participantEditText: EditText,
-            numbOfField: Int
+            numberOfET: Int
         ) {
-            participantEditText.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    participantEditText.setText("")
-                }
+
+            editText.tag?.let {
+                editText.removeTextChangedListener(it as TextWatcher)
             }
 
-            participantEditText.addTextChangedListener(
-                object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                    override fun afterTextChanged(s: Editable?) {
+            object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable) {
+                    if (editText.hasFocus()) {
                         val point = s.toString().toIntOrNull()
                         if (point != null && point !in 0..5) {
-                            participantEditText.background.setTint(Color.RED)
+                            editText.background.setTint(Color.RED)
                             Toast.makeText(
                                 itemView.context,
                                 itemView.context.getText(R.string.incorrect_value),
                                 Toast.LENGTH_SHORT
                             ).show()
+                        } else {
+                            refreshEditText(editText)
                         }
-
-                        participantEditText.onNext {
-                            onItemClicked(updateParticipant(numbOfField, participant, point))
-                            s?.clear()
-                        }
+                        onItemClicked(updateParticipant(numberOfET, participant, point))
                     }
                 }
-            )
+            }.also {
+                editText.addTextChangedListener(it)
+                editText.tag = it
+            }
         }
 
         private fun updateParticipant(
@@ -207,17 +166,7 @@ class ParticipantAdapterDelegate(
             }
         }
 
-        private fun setClickListeners(participant: Participant) {
-            setClickListener(participant, binding.participantEditText1, 1)
-            setClickListener(participant, binding.participantEditText2, 2)
-            setClickListener(participant, binding.participantEditText3, 3)
-            setClickListener(participant, binding.participantEditText4, 4)
-            setClickListener(participant, binding.participantEditText5, 5)
-            setClickListener(participant, binding.participantEditText6, 6)
-            setClickListener(participant, binding.participantEditText7, 7)
-        }
-
-        private fun refresh() {
+        private fun getEditTextList(): List<EditText> =
             listOf(
                 binding.participantEditText1,
                 binding.participantEditText2,
@@ -226,11 +175,22 @@ class ParticipantAdapterDelegate(
                 binding.participantEditText5,
                 binding.participantEditText6,
                 binding.participantEditText7,
-            ).forEach { editText ->
-                editText.isEnabled = true
-                editText.background.setTint(Color.WHITE)
-                editText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI)
+            )
+
+        private fun refresh() =
+            getEditTextList().forEach { editText ->
+                refreshEditText(editText)
             }
+
+
+        private fun refreshEditText(editText: EditText) {
+            editText.isEnabled = true
+            editText.background.setTint(Color.WHITE)
+        }
+
+        private fun disableEditText(participantEditText: EditText) {
+            participantEditText.isEnabled = false
+            participantEditText.background.setTint(Color.BLACK)
         }
     }
 }

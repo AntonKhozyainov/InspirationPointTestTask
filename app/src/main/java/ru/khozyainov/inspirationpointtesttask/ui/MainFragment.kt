@@ -31,17 +31,16 @@ class MainFragment : ViewBindingFragment<FragmentMainBinding>(FragmentMainBindin
     }
 
     private fun observeStateFlow() {
-        viewModel.participant.launchAndCollectIn(viewLifecycleOwner) { participants ->
+        viewModel.participants.launchAndCollectIn(viewLifecycleOwner) { participants ->
             adapter.items = participants
         }
     }
 
     private fun initLeagueTable() {
-        adapter = ParticipantAdapter { participant ->
-            viewModel.updateParticipant(participant)
+        adapter = ParticipantAdapter{participant ->
+            viewModel.updateListParticipants(participant)
         }
         binding.leagueTableRecyclerView?.adapter = adapter
         binding.leagueTableRecyclerView?.layoutManager = LinearLayoutManager(context)
-
     }
 }
